@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Mortality Risk Calculator</title>
+<title>5-Year Mortality Risk Calculator</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Times New Roman',Times,Georgia,serif;background:linear-gradient(180deg,#FBFBFD 0%,#F5F5F7 100%);color:#1D1D1F;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
@@ -59,7 +59,7 @@ select{width:100%;padding:8px 12px;border:1.5px solid #E5E5EA;border-radius:8px;
 </head>
 <body>
 <div class="container">
-<div class="hero"><h1>Mortality Risk Calculator</h1><p>Six routine biomarkers &amp; grip strength &middot; Adults aged 60 and older</p></div>
+<div class="hero"><h1>5-Year Mortality Risk Calculator</h1><p>Six routine biomarkers &amp; grip strength &middot; Adults aged 60 and older &middot; NHANES 2011-2014</p></div>
 
 <div class="card"><h3>Muscle &amp; Demographics</h3>
 <div class="row">
@@ -85,7 +85,7 @@ select{width:100%;padding:8px 12px;border:1.5px solid #E5E5EA;border-radius:8px;
 
 <div class="result" id="result">
 <div class="result-card">
-<div class="big-number" id="riskVal">--</div><div class="big-label">6.5-Year All-Cause Mortality Risk</div>
+<div class="big-number" id="riskVal">--</div><div class="big-label">5-Year All-Cause Mortality Risk</div>
 <div class="gauge-section"><div class="gauge-outer"><div class="gauge-bar"><div class="gauge-fill" id="gFill" style="width:0%"></div><div class="gauge-marker" id="gMarker" style="left:0%"></div></div><div class="gauge-labels"><span>Low</span><span>Average</span><span>High</span><span>Very High</span></div></div></div>
 <div class="stats-row">
 <div class="stat-box"><div class="val" id="catLabel" style="color:#1D1D1F">--</div><div class="lbl">Risk Category</div></div>
@@ -106,13 +106,13 @@ function animateValue(el,start,end,duration){var startTime=null;function step(t)
 
 function calc(){
   var g=parseFloat(document.getElementById('grip').value)||31.7,h=parseFloat(document.getElementById('hgb').value)||13.8,hc=parseFloat(document.getElementById('hct').value)||40.6,m=parseFloat(document.getElementById('mcv').value)||90.8,c=parseFloat(document.getElementById('crea').value)||1.03,b=parseFloat(document.getElementById('bun').value)||16.1,a=parseFloat(document.getElementById('age').value)||70,s=parseInt(document.getElementById('sex').value)||0;
-  var lp=-0.315*(g/5-R.GRIP)-0.117*(h-R.HGB)+0.011*(hc-R.HCT)+0.006*(m-R.MCV)+0.194*(c-R.CREA)+0.009*(b-R.BUN)+0.087*(a-R.AGE)-1.133*s;
-  var risk=1-Math.pow(0.863,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
+  var lp=-0.315*(g/5-R.GRIP)-0.336*(h-R.HGB)+0.058*(hc-R.HCT)+0.029*(m-R.MCV)+0.178*(c-R.CREA)+0.006*(b-R.BUN)+0.087*(a-R.AGE)-1.145*s;
+  var risk=1-Math.pow(0.915,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
   document.getElementById('result').style.display='block';
   var el=document.getElementById('riskVal');animateValue(el,parseFloat(el.textContent)||0,pct,600);
-  el.style.color=pct<8?'#34C759':pct<18?'#FF9500':pct<30?'#FF3B30':'#1D1D1F';
-  var gp=Math.min(97,Math.max(3,pct*1.5));document.getElementById('gMarker').style.left=gp+'%';document.getElementById('gFill').style.width=gp+'%';
-  var cat=pct<8?'Low':pct<18?'Moderate':pct<30?'Elevated':'High';var catEl=document.getElementById('catLabel');catEl.textContent=cat;catEl.style.color=pct<8?'#34C759':pct<18?'#FF9500':pct<30?'#FF3B30':'#1D1D1F';
+  el.style.color=pct<5?'#34C759':pct<12?'#FF9500':pct<22?'#FF3B30':'#1D1D1F';
+  var gp=Math.min(97,Math.max(3,pct*2.5));document.getElementById('gMarker').style.left=gp+'%';document.getElementById('gFill').style.width=gp+'%';
+  var cat=pct<5?'Low':pct<12?'Moderate':pct<22?'Elevated':'High';var catEl=document.getElementById('catLabel');catEl.textContent=cat;catEl.style.color=pct<5?'#34C759':pct<12?'#FF9500':pct<22?'#FF3B30':'#1D1D1F';
   var perc=Math.round((1-risk)*100);document.getElementById('percentileLabel').textContent=perc+'th';document.getElementById('percentileFill').style.width=perc+'%';
   var gPct=Math.round((g-15)/40*100);gPct=Math.max(2,Math.min(98,gPct));document.getElementById('gripLabel').textContent=gPct+'th';document.getElementById('gripPctFill').style.width=gPct+'%';
   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
