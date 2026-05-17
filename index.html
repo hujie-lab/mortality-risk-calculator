@@ -86,7 +86,7 @@ select{width:100%;padding:8px 12px;border:1.5px solid #E5E5EA;border-radius:8px;
 <div class="result" id="result">
 <div class="result-card">
 <div class="big-number" id="riskVal">--</div><div class="big-label">5-Year All-Cause Mortality Risk</div>
-<div class="gauge-section"><div class="gauge-outer"><div class="gauge-bar"><div class="gauge-fill" id="gFill" style="width:0%"></div><div class="gauge-marker" id="gMarker" style="left:0%"></div></div><div class="gauge-labels"><span>Low</span><span>Average</span><span>High</span><span>Very High</span></div></div></div>
+<div class="gauge-section"><div class="gauge-outer"><div class="gauge-bar"><div class="gauge-fill" id="gFill" style="width:0%"></div><div class="gauge-marker" id="gMarker" style="left:0%"></div></div><div class="gauge-labels"><span>95th (Low Risk)</span><span>70th</span><span>40th</span><span>5th (High Risk)</span></div></div></div>
 <div class="stats-row">
 <div class="stat-box"><div class="val" id="catLabel" style="color:#1D1D1F">--</div><div class="lbl">Risk Category</div></div>
 <div class="stat-box"><div class="val" id="percentileLabel">--</div><div class="lbl">Population Percentile</div><div class="pct-bar"><div class="pct-fill" id="percentileFill" style="width:0%"></div></div></div>
@@ -110,10 +110,11 @@ function calc(){
   var risk=1-Math.pow(0.915,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
   document.getElementById('result').style.display='block';
   var el=document.getElementById('riskVal');animateValue(el,parseFloat(el.textContent)||0,pct,600);
-  el.style.color=pct<5?'#34C759':pct<12?'#FF9500':pct<22?'#FF3B30':'#1D1D1F';
-  var gp=Math.min(97,Math.max(3,pct*2.5));document.getElementById('gMarker').style.left=gp+'%';document.getElementById('gFill').style.width=gp+'%';
-  var cat=pct<5?'Low':pct<12?'Moderate':pct<22?'Elevated':'High';var catEl=document.getElementById('catLabel');catEl.textContent=cat;catEl.style.color=pct<5?'#34C759':pct<12?'#FF9500':pct<22?'#FF3B30':'#1D1D1F';
-  var perc=Math.round((1-risk)*100);document.getElementById('percentileLabel').textContent=perc+'th';document.getElementById('percentileFill').style.width=perc+'%';
+  var perc=Math.round((1-risk)*100);perc=Math.max(2,Math.min(98,perc));
+  el.style.color=perc>90?'#34C759':perc>70?'#FF9500':perc>40?'#FF3B30':'#1D1D1F';
+  document.getElementById('gMarker').style.left=perc+'%';document.getElementById('gFill').style.width=perc+'%';
+  var cat=perc>90?'Low Risk':perc>70?'Moderate':perc>40?'Elevated':'High';var catEl=document.getElementById('catLabel');catEl.textContent=cat;catEl.style.color=perc>90?'#34C759':perc>70?'#FF9500':perc>40?'#FF3B30':'#1D1D1F';
+  document.getElementById('percentileLabel').textContent=perc+'th';document.getElementById('percentileFill').style.width=perc+'%';
   var gPct=Math.round((g-15)/40*100);gPct=Math.max(2,Math.min(98,gPct));document.getElementById('gripLabel').textContent=gPct+'th';document.getElementById('gripPctFill').style.width=gPct+'%';
   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
 }
