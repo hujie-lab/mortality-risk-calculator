@@ -106,8 +106,8 @@ function animateValue(el,start,end,duration){var startTime=null;function step(t)
 
 function calc(){
   var g=parseFloat(document.getElementById('grip').value)||31.7,h=parseFloat(document.getElementById('hgb').value)||13.8,hc=parseFloat(document.getElementById('hct').value)||40.6,m=parseFloat(document.getElementById('mcv').value)||90.8,c=parseFloat(document.getElementById('crea').value)||1.03,b=parseFloat(document.getElementById('bun').value)||16.1,a=parseFloat(document.getElementById('age').value)||70,s=parseInt(document.getElementById('sex').value)||0;
-  var lp=-0.315*(g/5-R.GRIP)-0.336*(h-R.HGB)+0.058*(hc-R.HCT)+0.029*(m-R.MCV)+0.178*(c-R.CREA)+0.006*(b-R.BUN)+0.087*(a-R.AGE)-1.145*s;
-  var risk=1-Math.pow(0.915,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
+  var lp=-0.315*(g/5-R.GRIP)-0.117*(h-R.HGB)+0.011*(hc-R.HCT)+0.006*(m-R.MCV)+0.194*(c-R.CREA)+0.009*(b-R.BUN)+0.087*(a-R.AGE)-1.133*s;
+  var risk=1-Math.pow(0.910,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
   document.getElementById('result').style.display='block';
   var el=document.getElementById('riskVal');animateValue(el,parseFloat(el.textContent)||0,pct,600);
   var perc=Math.round((1-risk)*100);perc=Math.max(1,Math.min(99,perc));
