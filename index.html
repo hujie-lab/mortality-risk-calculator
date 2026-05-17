@@ -63,7 +63,7 @@ select{width:100%;padding:8px 12px;border:1.5px solid #E5E5EA;border-radius:8px;
 
 <div class="card"><h3>Muscle &amp; Demographics</h3>
 <div class="row">
-<div class="field"><label>Grip Strength <span class="unit">kg</span></label><div class="val-row"><span class="lo">5</span><input type="range" id="rg_grip" min="5" max="65" value="37" step="0.5" oninput="syncRange('grip')"><span class="hi">65</span><input type="number" id="grip" value="37" min="3" max="80" step="0.1" oninput="syncNum('grip')"></div></div>
+<div class="field"><label>Grip Strength <span class="unit">kg</span></label><div class="val-row"><span class="lo">3</span><input type="range" id="rg_grip" min="3" max="65" value="32" step="0.5" oninput="syncRange('grip')"><span class="hi">65</span><input type="number" id="grip" value="31.7" min="3" max="80" step="0.1" oninput="syncNum('grip')"></div></div>
 <div class="field"><label>Age <span class="unit">years</span></label><div class="val-row"><span class="lo">60</span><input type="range" id="rg_age" min="60" max="95" value="70" step="1" oninput="syncRange('age')"><span class="hi">95</span><input type="number" id="age" value="70" min="60" max="100" oninput="syncNum('age')"></div></div>
 <div class="field"><label>Sex</label><select id="sex"><option value="0">Male</option><option value="1">Female</option></select></div>
 </div></div>
@@ -96,7 +96,7 @@ select{width:100%;padding:8px 12px;border:1.5px solid #E5E5EA;border-radius:8px;
 </div>
 </div>
 <script>
-var R={GRIP:7.48,HGB:14.0,HCT:41.0,MCV:89.2,CREA:0.90,BUN:15.0,AGE:70};
+var R={GRIP:6.342,HGB:13.755,HCT:40.617,MCV:90.809,CREA:1.026,BUN:16.102,AGE:69.7};
 
 function syncRange(id){var n=document.getElementById(id);var r=document.getElementById('rg_'+id);n.value=r.value;updateTrack(r);}
 function syncNum(id){var n=document.getElementById(id);var r=document.getElementById('rg_'+id);if(r)r.value=n.value;updateTrack(r);}
@@ -105,9 +105,9 @@ function updateTrack(r){if(!r)return;var lo=parseFloat(r.min);var hi=parseFloat(
 function animateValue(el,start,end,duration){var startTime=null;function step(t){startTime||(startTime=t);var progress=Math.min((t-startTime)/duration,1);var eased=1-Math.pow(1-progress,3);el.textContent=Math.round((start+(end-start)*eased)*10)/10+'%';if(progress<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
 
 function calc(){
-  var g=parseFloat(document.getElementById('grip').value)||37.4,h=parseFloat(document.getElementById('hgb').value)||14,hc=parseFloat(document.getElementById('hct').value)||41,m=parseFloat(document.getElementById('mcv').value)||89,c=parseFloat(document.getElementById('crea').value)||0.9,b=parseFloat(document.getElementById('bun').value)||15,a=parseFloat(document.getElementById('age').value)||70,s=parseInt(document.getElementById('sex').value)||0;
-  var lp=-0.318*(g/5-R.GRIP)-0.117*(h-R.HGB)+0.008*(hc-R.HCT)+0.005*(m-R.MCV)+0.199*(c-R.CREA)+0.009*(b-R.BUN)+0.113*(a-R.AGE)-0.327*s;
-  var risk=1-Math.pow(0.794,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
+  var g=parseFloat(document.getElementById('grip').value)||31.7,h=parseFloat(document.getElementById('hgb').value)||13.8,hc=parseFloat(document.getElementById('hct').value)||40.6,m=parseFloat(document.getElementById('mcv').value)||90.8,c=parseFloat(document.getElementById('crea').value)||1.03,b=parseFloat(document.getElementById('bun').value)||16.1,a=parseFloat(document.getElementById('age').value)||70,s=parseInt(document.getElementById('sex').value)||0;
+  var lp=-0.315*(g/5-R.GRIP)-0.117*(h-R.HGB)+0.011*(hc-R.HCT)+0.006*(m-R.MCV)+0.194*(c-R.CREA)+0.009*(b-R.BUN)+0.087*(a-R.AGE)-1.133*s;
+  var risk=1-Math.pow(0.863,Math.exp(lp));var pct=Math.max(0.1,Math.round(risk*1000)/10);
   document.getElementById('result').style.display='block';
   var el=document.getElementById('riskVal');animateValue(el,parseFloat(el.textContent)||0,pct,600);
   el.style.color=pct<8?'#34C759':pct<18?'#FF9500':pct<30?'#FF3B30':'#1D1D1F';
